@@ -620,6 +620,9 @@ int x86_reg_read(struct uc_struct *uc, unsigned int *regs, void **vals, int coun
                     case UC_X86_REG_FSBASE:
                         *(uint64_t*)value = X86_CPU(uc, mycpu)->env.segs[R_FS].base;
                         break;
+                    case UC_X86_REG_GSBASE:
+                        *(uint64_t*)value = X86_CPU(uc, mycpu)->env.segs[R_GS].base;
+                        break;
                 }
                 break;
 #endif
@@ -1111,6 +1114,9 @@ int x86_reg_write(struct uc_struct *uc, unsigned int *regs, void *const *vals, i
                         break;
                     case UC_X86_REG_FSBASE:
                         X86_CPU(uc, mycpu)->env.segs[R_FS].base = *(uint64_t*)value;
+                        break;
+                    case UC_X86_REG_GSBASE:
+                        X86_CPU(uc, mycpu)->env.segs[R_GS].base = *(uint64_t*)value;
                         break;
                 }
                 break;
