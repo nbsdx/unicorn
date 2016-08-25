@@ -617,6 +617,9 @@ int x86_reg_read(struct uc_struct *uc, unsigned int *regs, void **vals, int coun
                         ((uc_x86_mmr *)value)->selector = (uint16_t)X86_CPU(uc, mycpu)->env.tr.selector;
                         ((uc_x86_mmr *)value)->flags = X86_CPU(uc, mycpu)->env.tr.flags;
                         break;
+                    case UC_X86_REG_FSBASE:
+                        *(uint64_t*)value = X86_CPU(uc, mycpu)->env.segs[R_FS].base;
+                        break;
                 }
                 break;
 #endif
@@ -1105,6 +1108,9 @@ int x86_reg_write(struct uc_struct *uc, unsigned int *regs, void *const *vals, i
                         X86_CPU(uc, mycpu)->env.tr.base = ((uc_x86_mmr *)value)->base;
                         X86_CPU(uc, mycpu)->env.tr.selector = (uint16_t)((uc_x86_mmr *)value)->selector;
                         X86_CPU(uc, mycpu)->env.tr.flags = ((uc_x86_mmr *)value)->flags;
+                        break;
+                    case UC_X86_REG_FSBASE:
+                        X86_CPU(uc, mycpu)->env.segs[R_FS].base = *(uint64_t*)value;
                         break;
                 }
                 break;
