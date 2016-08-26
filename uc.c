@@ -1150,7 +1150,7 @@ uint32_t uc_mem_regions(uc_engine *uc, uc_mem_region **regions, uint32_t *count)
 
     for (i = 0; i < *count; i++) {
         r[i].begin = uc->mapped_blocks[i]->addr;
-        r[i].end = uc->mapped_blocks[i]->end - 1;
+        r[i].end = uc->mapped_blocks[i]->end; // - 1;
         r[i].perms = uc->mapped_blocks[i]->perms;
     }
 
