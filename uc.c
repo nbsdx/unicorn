@@ -683,8 +683,24 @@ static uc_err mem_map(uc_engine *uc, uint64_t address, size_t size, uint32_t per
         uc->mapped_blocks = regions;
     }
 
-    uc->mapped_blocks[uc->mapped_block_count] = block;
-    uc->mapped_block_count++;
+    int i;
+    MemoryRegion *to_relocate = NULL;
+    for (i = 0; i < uc->mapped_block_count; ++i)
+    {
+        if (to_relocate)
+        {
+            MemoryRegion *tmp = uc->mapped_blocks[i];
+            uc->mapped_blocks[i] = to_relocate;
+            to_relocate = tmp;
+        }
+        else if (block->addr < uc->mapped_blocks[i]->addr)
+        {
+            to_relocate = uc->mapped_blocks[i];
+            uc->mapped_blocks[i] = block;
+        }
+    }
+
+    uc->mapped_blocks[uc->mapped_block_count++] = (to_relocate ? to_relocate : block);
 
     return UC_ERR_OK;
 }
